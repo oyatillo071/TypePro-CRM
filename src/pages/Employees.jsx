@@ -1,12 +1,9 @@
-import React from "react";
-import Employee from "../components/Employee";
+import React, { useState } from "react";
+import EmptyEmployee from "../components/EmptyEmployee";
 
 function Employees() {
-  return (
-    <div>
-      <Employee />
-    </div>
-  );
+  const [isEmpty, setIsEmpty] = useState(true);
+  return <div>{isEmpty && <EmptyEmployee />}</div>;
 }
 
 export default Employees;

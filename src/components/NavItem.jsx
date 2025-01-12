@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 function NavItem(props) {
   const { title, img, link } = props.data;
-  console.log(props);
+  // console.log(props);
   return (
     <div>
       <NavLink

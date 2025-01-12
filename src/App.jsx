@@ -1,13 +1,24 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
+import MainLayout from "./Layout/MainLayout";
+import { Routes, Route } from "react-router-dom";
+import Employees from "./pages/Employees";
 
 function App() {
   return (
-    <Routes>
+    <>
+      <Routes>
       <Route path="/login" element={<Login />} />
-    </Routes>
-  );
-}
+          <Route
+          path="/"
+          element={
+            <MainLayout>
+              <Employees />
+            </MainLayout>
+          }
+        />
+      </Routes>
+    </>
+)}
 
 export default App;

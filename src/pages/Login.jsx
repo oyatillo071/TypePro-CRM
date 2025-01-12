@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
-import { validateEmail } from "../requests/functions";
+
 import { toast, Toaster } from "sonner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../requests";
+import { validateEmail } from "../functions";
 
 function Login() {
   const [data, setData] = useState(null);

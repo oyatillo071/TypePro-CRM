@@ -11,13 +11,15 @@ export const navItems = [
       src: DNS,
       alt: "umumiy icon",
     },
+    link: "/public",
   },
   {
-    title: "Block langanar",
+    title: "Block langanlar",
     img: {
       src: Check,
       alt: "check icon",
     },
+    link: "/blocks",
   },
   {
     title: "Managerlar",
@@ -25,6 +27,7 @@ export const navItems = [
       src: People,
       alt: "people icon",
     },
+    link: "/managers",
   },
   {
     title: "Hodimlar",
@@ -32,6 +35,7 @@ export const navItems = [
       src: Employee,
       alt: "employee icon",
     },
+    link: "employes",
   },
   {
     title: "Vazifalar",
@@ -39,5 +43,6 @@ export const navItems = [
       src: Task,
       alt: "task icon",
     },
+    link: "/tasks",
   },
 ];

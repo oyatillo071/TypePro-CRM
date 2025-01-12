@@ -1,27 +1,22 @@
 import React from "react";
 import ArrowDown from "../images/keyboard-arrow-down.svg";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 function Header() {
   return (
     <>
-      <header className="min-w-[1118px] ">
-        <div className="container flex justify-end">
-          <div className="flex items-start justify-end gap-3 mt-4">
-            <div className="text-right">
-              <h1 className="text-[14px] leading-[18px] text-[#2C3030]">
-                manager@mail.ru
-              </h1>
-              <h2 className="text-[#9A9C9C] text-[12px] leading-[18px]">
-                Администратор компании
-              </h2>
-            </div>
-            <div className="arrow">
-              <img src={ArrowDown} alt="" />
-            </div>
-          </div>
+      <header className="w-full bg-white h-16 py-2">
+        <div className="container flex flex-col justify-end items-end text-right">
+          <h3 className="flex items-center gap-3  text-[#2C3030]">
+            manager@mail.ru
+            <ChevronDownIcon />
+          </h3>
+          <h4 className="text-[#9A9C9C] text-[12px] leading-[18px] mr-6">
+            Администратор компании
+          </h4>
         </div>
       </header>
-      <hr className="h-[1px]  w-[1300px] bg-[#ffffff] mt-[13px]" />
+      <hr className="w-full bg-[#E8E8E8] h-[2px] " />
     </>
   );
 }

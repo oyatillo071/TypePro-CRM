@@ -6,7 +6,7 @@ function MainLayout({ children }) {
   return (
     <div className="flex justify-between">
       <Sidebar />
-      <div className="flex flex-col items-center">
+      <div className="w-full min-h-screen flex justify-end flex-col">
         <Header />
         {children}
       </div>

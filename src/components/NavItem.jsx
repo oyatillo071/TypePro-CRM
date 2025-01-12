@@ -1,16 +1,18 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 function NavItem(props) {
-  const { title, img } = props.data;
+  const { title, img, link } = props.data;
   console.log(props);
   return (
     <div>
-      <div className="flex items-center gap-3 p-3 mt-2 rounded-lg cursor-pointer navigation">
+      <NavLink
+        to={link}
+        className="flex items-center gap-3 p-3 mt-2  cursor-pointer  font-medium   text-[#2C3030] "
+      >
         <img src={img.src} alt={`${img.alt}`} />
-        <p className="font-medium text-[14px] leading-[18px] text-[#2C3030] opacity-40">
-          {title}
-        </p>{" "}
-      </div>
+        {title}
+      </NavLink>
     </div>
   );
 }

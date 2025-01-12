@@ -9,7 +9,7 @@ function Sidebar() {
         <div className="min-h-screen min-w-[230px] max-w-[20%] h-full bg-[#F3F3F3] pt-4 pl-4">
           <div className="container">
             <div className="head">
-              <img src={Logo} alt="" />
+              <img src={Logo} alt="typepro logo" />
               <NavItems />
             </div>
           </div>

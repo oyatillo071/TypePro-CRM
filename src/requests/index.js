@@ -22,7 +22,7 @@ export async function loginApi(data, navigate) {
 // Managers API full
 export async function getManagersApi(navigate, id = "") {
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const token = userData?.access_token;
+  const token = userData?.accessToken;
 
   if (!token) {
     navigate("/login");
@@ -55,7 +55,7 @@ export async function getManagersApi(navigate, id = "") {
 // Full get api
 export async function fullGetApi(navigate, url = "") {
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const token = userData?.access_token;
+  const token = userData?.accessToken;
 
   if (!token) {
     navigate("/login");
@@ -85,7 +85,7 @@ export async function fullGetApi(navigate, url = "") {
 // Search manager
 export async function getManagersByNameApi(name, navigate) {
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const token = userData?.access_token;
+  const token = userData?.accessToken;
 
   if (!token) {
     navigate("/login");
@@ -118,7 +118,7 @@ export async function getManagersByNameApi(name, navigate) {
 //Pagination manager
 export async function getManagersWithPagination(page, limit, navigate) {
   const userData = JSON.parse(localStorage.getItem("userData"));
-  const token = userData?.access_token;
+  const token = userData?.accessToken;
 
   if (!token) {
     navigate("/login");

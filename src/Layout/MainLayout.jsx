@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import { useNavigate } from "react-router-dom";
 
 function MainLayout({ children }) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    localStorage.getItem("userData") ? "" : navigate("/login");
+  });
   return (
     <div className="flex justify-between">
       <Sidebar />
-      <div className="w-full min-h-screen flex justify-end flex-col">
+      <div className="w-full min-h-screen flex justify-start flex-col">
         <Header />
         {children}
       </div>

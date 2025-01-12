@@ -28,8 +28,8 @@ function Login() {
       toast.info("Email xato kiritildi");
       return;
     }
-    if (password?.length < 7) {
-      toast.info("Parol 8 ta belgidan kichik bolishi mumkin emas");
+    if (password?.length < 4) {
+      toast.info("Parol 5 ta belgidan kichik bolishi mumkin emas");
       setErrors((prev) => {
         return { ...prev, password: "Parol xato kiritildi" };
       });
@@ -44,23 +44,6 @@ function Login() {
       password: "",
     });
     loginApi(data, navigate);
-
-    // axios
-    //   .post("http://localhost:3000/login", data, {
-    //     header: {
-    //       "Content-Type": "aplication-json",
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log(response);
-    //     if (response.status == 200) {
-    //       localStorage.setItem("userData", response.data);
-    //       navigate("/");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   }
   useEffect(() => {}, [data]);
   return (

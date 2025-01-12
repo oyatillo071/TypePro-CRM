@@ -1,10 +1,22 @@
 import React from "react";
+import MainLayout from "./Layout/MainLayout";
+import { Routes, Route } from "react-router-dom";
+import Employees from "./pages/Employees";
 
 function App() {
   return (
-    <div>
-      <h1 className="text-lightGreen text-center">Text</h1>
-    </div>
+    <>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <MainLayout>
+              <Employees />
+            </MainLayout>
+          }
+        />
+      </Routes>
+    </>
   );
 }
 

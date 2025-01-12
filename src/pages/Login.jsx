@@ -5,6 +5,7 @@ import { validateEmail } from "../requests/functions";
 import { toast, Toaster } from "sonner";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { loginApi } from "../requests";
 
 function Login() {
   const [data, setData] = useState(null);
@@ -41,22 +42,24 @@ function Login() {
       email: "",
       password: "",
     });
-    axios
-      .post("http://localhost:3000/login", data, {
-        header: {
-          "Content-Type": "aplication-json",
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.status == 200) {
-          localStorage.setItem("userData", response.data);
-          navigate("/");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    loginApi(data, navigate);
+
+    // axios
+    //   .post("http://localhost:3000/login", data, {
+    //     header: {
+    //       "Content-Type": "aplication-json",
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log(response);
+    //     if (response.status == 200) {
+    //       localStorage.setItem("userData", response.data);
+    //       navigate("/");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   }
   useEffect(() => {}, [data]);
   return (
@@ -73,25 +76,35 @@ function Login() {
         <hr className="my-4" />
         <div className="flex flex-col gap-4">
           <Input
-            labelText={"E-mail"}
-            id={"email"}
-            type={"text"}
-            placeholderText={"Email kiriting:"}
+            data={{
+              labelText: "E-mail",
+              id: "email",
+              type: "text",
+              placeholderText: "Email kiriting:",
+            }}
           />
           {errors.email.trim() && (
             <p className="text-red-600">{errors.email}</p>
           )}
           <Input
-            labelText={"Parol"}
-            id={"password"}
-            type={"password"}
-            placeholderText={"Parol kiriting:"}
+            data={{
+              labelText: "Parol",
+              id: "password",
+              type: "password",
+              placeholderText: "Parol kiriting:",
+            }}
           />
           {errors.password.trim() && (
             <p className="text-red-600">{errors.password}</p>
           )}
         </div>
-        <Button text="Kirish" type={"submit"} variant={"greenSubmit"} />
+        <Button
+          data={{
+            text: "Kirish",
+            bgColor: "lightGreen",
+            type: "submit",
+          }}
+        />
       </form>
     </div>
   );

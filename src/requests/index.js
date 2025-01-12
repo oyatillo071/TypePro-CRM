@@ -1,3 +1,5 @@
+import axios from "axios";
+
 // Login API
 export async function loginApi(data, navigate) {
   try {

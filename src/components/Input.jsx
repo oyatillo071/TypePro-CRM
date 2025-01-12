@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { EyeClosedIcon, EyeOpenIcon } from "@radix-ui/react-icons";
 
-function Input({ labelText, placeholderText, id, type }) {
+function Input(props) {
+  const { labelText, placeholderText, id, type } = props.data;
   const [isEyeHide, setIsEyeHide] = useState("false");
 
   if (type == "text") {
@@ -11,7 +12,7 @@ function Input({ labelText, placeholderText, id, type }) {
           {labelText}
         </label>
         <input
-          type="text"
+          type={type}
           id={id}
           className="border px-3 py-2 w-full rounded-lg "
           placeholder={placeholderText}

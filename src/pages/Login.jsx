@@ -1,44 +1,67 @@
 import React, { useEffect, useState } from "react";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import { validateEmail } from "../requests/functions";
+import { toast, Toaster } from "sonner";
 import axios from "axios";
-import { validateEmail } from "../requests";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [data, setData] = useState(null);
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
   function handleSubmit(event) {
     const email = event.target[0].value;
     const password = event.target[1].value;
+
+    const emailValidateRes = validateEmail(email);
+    if (!emailValidateRes) {
+      setErrors((prev) => {
+        return { ...prev, email: "Email xato kiritildi" };
+      });
+      toast.info("Email xato kiritildi");
+      return;
+    }
+    if (password?.length < 7) {
+      toast.info("Parol 8 ta belgidan kichik bolishi mumkin emas");
+      setErrors((prev) => {
+        return { ...prev, password: "Parol xato kiritildi" };
+      });
+      return;
+    }
+    console.log("Validate successfuly");
     setData(() => {
       return { email, password };
     });
+    setErrors({
+      email: "",
+      password: "",
+    });
+    axios
+      .post("http://localhost:3000/login", data, {
+        header: {
+          "Content-Type": "aplication-json",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          localStorage.setItem("userData", response.data);
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
-  useEffect(() => {
-    console.log(data);
-    if (data?.password?.length < 7) {
-      console.log("password uzunligi etarli emas");
-      return;
-    }
-    const emailValidateRes = !validateEmail(data?.email);
-    if (emailValidateRes) {
-      console.log(emailValidateRes);
-      return;
-    }
-    // axios
-    //   .post("http://localhost:3000/login", data, {
-    //     header: {
-    //       "Content-Type": "aplication-json",
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-  }, [data]);
+  useEffect(() => {}, [data]);
   return (
     <div className="container justify-center flex items-center min-h-screen">
+      <Toaster position="top-right" />
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -55,12 +78,18 @@ function Login() {
             type={"text"}
             placeholderText={"Email kiriting:"}
           />
+          {errors.email.trim() && (
+            <p className="text-red-600">{errors.email}</p>
+          )}
           <Input
             labelText={"Parol"}
             id={"password"}
             type={"password"}
             placeholderText={"Parol kiriting:"}
           />
+          {errors.password.trim() && (
+            <p className="text-red-600">{errors.password}</p>
+          )}
         </div>
         <Button text="Kirish" type={"submit"} variant={"greenSubmit"} />
       </form>

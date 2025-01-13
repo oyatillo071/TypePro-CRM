@@ -33,8 +33,8 @@ export const navItems = [
           <g opacity="0.4" clip-path="url(#clip0_4_1770)">
             <path
               d="M15.8333 2.5H4.16667C3.24167 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.7583 17.5 17.5 16.75 17.5 15.8333V4.16667C17.5 3.25 16.7583 2.5 15.8333 2.5ZM8.33333 14.1667L4.16667 10L5.34167 8.825L8.33333 11.8083L14.6583 5.48333L15.8333 6.66667L8.33333 14.1667Z"
-              fill="#141A18"
-              fill-opacity="0.6"
+              fill="green"
+              fill-opacity="0.9"
             />
           </g>
           <defs>
@@ -45,7 +45,7 @@ export const navItems = [
         </svg>`,
       alt: "check icon",
     },
-    link: "/blocks",
+    link: "/users",
   },
   {
     title: "Managerlar",
@@ -84,7 +84,7 @@ export const navItems = [
 `,
       alt: "employee icon",
     },
-    link: "employes",
+    link: "/employees",
   },
   {
     title: "Vazifalar",

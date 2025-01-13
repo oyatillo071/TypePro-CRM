@@ -3,7 +3,7 @@ import EmptyEmployee from "../components/EmptyEmployee";
 import { addEmploy, addTasks } from "../constants";
 import Drawer from "../components/unversalDrawer";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { getManagersApi } from "../requests";
+import { fullGetApi, getManagersApi } from "../requests";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useObjectStore } from "../zustend/store";
@@ -25,21 +25,49 @@ function Employees() {
     console.log("Form ma'lumotlari:", formData);
     setModalOpen(false);
   };
+
   useEffect(() => {
+    console.log(params);
+
     const fetchData = async () => {
-      const data = await getManagersApi(navigate);
-      if (data) {
-        setIsEmpty(false);
-        setTableData(data);
+      let data = null;
+      let dataCopy = null;
+
+      try {
+        if (params.id.length > 3) {
+          if (params.id === "users") {
+            const employeesData = await fullGetApi(navigate, "employees");
+            const managersData = await fullGetApi(navigate, "managers");
+
+            data = [...employeesData, ...managersData];
+          } else {
+            data = await fullGetApi(navigate, params.id);
+          }
+        } else {
+          data = await getManagersApi(navigate);
+        }
+
+        console.log("Fetched Data:", data);
+
+        if (data) {
+          setIsEmpty(false);
+          setTableData(data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
+
     fetchData();
-  }, [navigate]);
+  }, [navigate, params]);
 
   function handleChange(employee) {
     console.log(employee);
     setEditData(employee);
   }
+  useEffect(() => {
+    console.log(tableData, "data 62 qator");
+  }, [tableData]);
 
   useEffect(() => {
     console.log(editData, "37qator");

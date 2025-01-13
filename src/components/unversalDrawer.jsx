@@ -22,7 +22,7 @@ function Drawer({ isOpen, onClose, title, inputs, onSubmit }) {
     e.preventDefault();
 
     const newErrors = {};
-    const formElements = e.target.form;
+    const formElements = e.target.elements;
 
     for (let element of formElements) {
       if (element.id && element.value.trim().length < 4) {
@@ -34,7 +34,7 @@ function Drawer({ isOpen, onClose, title, inputs, onSubmit }) {
       }
     }
 
-    console.log(newErrors, "Xatolar royhati");
+    // console.log(newErrors, "Xatolar royhati");
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -85,22 +85,21 @@ function Drawer({ isOpen, onClose, title, inputs, onSubmit }) {
               </div>
             )
           )}
-          <div className="flex justify-end space-x-4 items-center">
+          <div className="flex justify-end space-x-4">
             <button
-              type="button"
               onClick={onClose}
-              className="border rounded-lg text-black bg-white  py-2 px-4"
+              className="border rounded-lg text-black mt-6 bg-white  py-0 px-4"
             >
               Bekor qilish
             </button>
-
-            <button
-              type="submit"
+            <Button
               onClick={handleSubmit}
-              className="px-4 py-2 bg-lightGreen max-w-32  whitespace-nowrap flex items-center gap-2 text-white rounded hover:opacity-60"
-            >
-              Qo'shish
-            </button>
+              data={{
+                text: "Qo'shish",
+                bgColor: "lightGreen",
+                type: "submit",
+              }}
+            />
           </div>
         </form>
       </div>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "sonner";
 
 // Login API
 export async function loginApi(data, navigate) {
@@ -147,5 +148,190 @@ export async function getManagersWithPagination(page, limit, navigate) {
       navigate("/login");
     }
     console.error("Xatolik yuz berdi:", error.message);
+  }
+}
+
+// putch request
+
+export async function updateEmployeeData(employeeId, updates, navigate) {
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const token = userData?.accessToken;
+
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  try {
+    const response = await axios.get(
+      `http://localhost:3000/employees/${employeeId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      const existingData = response.data;
+
+      const updatedData = {
+        ...existingData,
+        ...updates,
+      };
+
+      const patchResponse = await axios.patch(
+        `http://localhost:3000/employees/${employeeId}`,
+        updatedData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (patchResponse.status === 200) {
+        console.log("Ma'lumot muvaffaqiyatli yangilandi:", patchResponse.data);
+        return patchResponse.data;
+      }
+    }
+  } catch (error) {
+    if (error.response?.status === 403 || error.response?.status === 401) {
+      navigate("/login");
+    }
+    console.error("Xatolik yuz berdi:", error.message);
+  }
+}
+
+// add tasks
+export async function addTaskApi(navigate, newTask) {
+  try {
+    const userData = await axios.get(`http://localhost:3000/tasks`);
+
+    if (userData.status === 200) {
+      const tasksData = userData.data;
+
+      const newTaskId =
+        tasksData.length > 0
+          ? Math.max(...tasksData.map((task) => task.id)) + 1
+          : 1;
+
+      const updatedTask = {
+        ...newTask,
+        id: newTaskId,
+      };
+
+      const updatedTasksData = [...tasksData, updatedTask];
+      const response = await axios.patch(
+        `http://localhost:3000/tasks`,
+        updatedTasksData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Vazifa muvaffaqiyatli qo'shildi:", response.data);
+        return response.data;
+      }
+    }
+  } catch (error) {
+    if (error.response?.status === 403) {
+      navigate("/login");
+    }
+    console.error("Xatolik yuz berdi:", error.message);
+  }
+}
+
+// add employee manager
+
+export async function addDynamicTaskApi(navigate, newTask, id = "") {
+  try {
+    const urlType = newTask.type === "manager" ? "managers" : "employees";
+
+    const response = await axios.get(`http://localhost:3000/${urlType}/${id}`);
+
+    if (response.status === 200) {
+      const existingData = response.data;
+
+      const currentTasks = existingData.tasks || [];
+      const newTaskId =
+        currentTasks.length > 0
+          ? Math.max(...currentTasks.map((task) => task.id)) + 1
+          : 1;
+
+      const updatedTask = {
+        ...newTask,
+        id: newTaskId,
+      };
+
+      const updatedData = {
+        ...existingData,
+        tasks: [...currentTasks, updatedTask],
+      };
+
+      const putResponse = await axios.patch(
+        `http://localhost:3000/${urlType}/${id}`,
+        updatedData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (putResponse.status === 200) {
+        console.log("Vazifa muvaffaqiyatli qo'shildi:", putResponse.data);
+        return putResponse.data;
+      }
+    }
+  } catch (error) {
+    if (error.response?.status === 403) {
+      navigate("/login");
+    }
+    console.error("Xatolik yuz berdi:", error.message);
+  }
+}
+
+// delete employee
+export async function deleteManagerApi(navigate, id) {
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const token = userData?.accessToken;
+
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  if (!id) {
+    toast.error("ID kiritilmagan");
+    return;
+  }
+
+  try {
+    const response = await axios.delete(
+      `http://localhost:3000/managers/${id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      toast.success("Manager o'chirildi:", response.data);
+      return response.data;
+    }
+  } catch (error) {
+    if (error.response?.status === 403) {
+      navigate("/login");
+      localStorage.removeItem(userData);
+    }
+    toast.error("Xatolik yuz berdi:", error.message);
   }
 }

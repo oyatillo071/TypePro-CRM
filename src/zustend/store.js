@@ -22,3 +22,10 @@ export const useObjectStore = create((set) => ({
 
   clear: () => set({ object: {} }),
 }));
+
+export const useEditStore = create((set) => ({
+  editData: null,
+  isEditModalOpen: false,
+  setEditData: (data) => set({ editData: data, isEditModalOpen: true }),
+  closeEditModal: () => set({ isEditModalOpen: false }),
+}));

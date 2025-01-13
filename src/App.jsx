@@ -5,7 +5,6 @@ import { Routes, Route } from "react-router-dom";
 import Employees from "./pages/Employees";
 import ErrorPage from "./pages/ErrorPage";
 import Details from "./pages/Details";
-import Tasks from "./components/Tasks";
 
 function App() {
   return (
@@ -28,14 +27,14 @@ function App() {
             </MainLayout>
           }
         />
-        <Route
+        {/* <Route
           path="/tasks"
           element={
             <MainLayout>
               <Tasks />
             </MainLayout>
           }
-        />
+        /> */}
 
         <Route path="*" element={<ErrorPage />} />
 

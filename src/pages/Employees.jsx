@@ -34,7 +34,7 @@ function Employees() {
       let dataCopy = null;
 
       try {
-        if (params.id.length > 3) {
+        if (params?.id?.length > 3) {
           if (params.id === "users") {
             const employeesData = await fullGetApi(navigate, "employees");
             const managersData = await fullGetApi(navigate, "managers");

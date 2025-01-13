@@ -16,7 +16,7 @@ function Header() {
           </h4>
         </div>
       </header>
-      <hr className="w-full bg-[#E8E8E8] h-[2px] " />
+      <hr className="w-full bg-[#E8E8E8] h-[1px] " />
     </>
   );
 }

@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function MainLayout({ children }) {
-  const navigate = useNavigate();
   useEffect(() => {
     localStorage.getItem("userData") ? "" : navigate("/login");
   });

@@ -4,14 +4,21 @@ import { addEmploy, addTasks } from "../constants";
 import Drawer from "../components/unversalDrawer";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { getManagersApi } from "../requests";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+
+import { useObjectStore } from "../zustend/store";
 
 function Employees() {
+  const { object, add, update, remove, clear } = useObjectStore();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isTaskModalOpen, setTaskModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const params = useParams();
+  useEffect(() => {
+    console.log(params);
+  });
   const [editData, setEditData] = useState("");
-  const navigagate = useNavigate();
   const [isEmpty, setIsEmpty] = useState(true);
   const [tableData, setTableData] = useState("");
   const handleSubmit = (formData) => {
@@ -20,14 +27,14 @@ function Employees() {
   };
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getManagersApi(navigagate);
+      const data = await getManagersApi(navigate);
       if (data) {
         setIsEmpty(false);
         setTableData(data);
       }
     };
     fetchData();
-  }, [navigagate]);
+  }, [navigate]);
 
   function handleChange(employee) {
     console.log(employee);
@@ -106,15 +113,24 @@ function Employees() {
             <tbody>
               {tableData &&
                 tableData?.map((employee, index) => {
-                  console.log(tableData.data, "88qator");
-
-                  console.log(employee, "87qator");
+                  // console.log(tableData.data, "88qator");
+                  // console.log(employee, "87qator");
                   return (
                     <tr
                       key={index}
                       className={`bg-white border-b hover:bg-gray-200`}
                     >
-                      <td className="p-4 ">{employee.name}</td>
+                      <td
+                        className="p-4 "
+                        onClick={() => {
+                          console.log(employee, "employee details");
+                          // dispatch(addItem(employee));
+                          add("key1", employee);
+                          navigate("/details");
+                        }}
+                      >
+                        {employee.name}
+                      </td>
                       <td className="p-4 ">{employee.type}</td>
                       <td className="p-4 ">{employee.last_name}</td>
                       {/* <td className="p-4 ">{employee.phone}</td> */}
@@ -136,7 +152,12 @@ function Employees() {
                         >
                           O'zgartirish
                         </button>
-                        <button className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                        <button
+                          onClick={(event) => {
+                            event.preventDefault();
+                          }}
+                          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                        >
                           O'chirish
                         </button>
                       </td>

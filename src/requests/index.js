@@ -45,7 +45,9 @@ export async function getManagersApi(navigate, id = "") {
       return response.data;
     }
   } catch (error) {
-    if (error.response?.status === 403) {
+    console.log(error);
+
+    if (error.response?.status == 403 || error.response?.status == 401) {
       navigate("/login");
     }
     console.error("Xatolik yuz berdi:", error.message);
@@ -75,7 +77,7 @@ export async function fullGetApi(navigate, url = "") {
       return response.data;
     }
   } catch (error) {
-    if (error.response?.status === 403) {
+    if (error.response?.status == 403 || error.response?.status == 401) {
       navigate("/login");
     }
     console.error("Xatolik yuz berdi:", error.message);
@@ -108,7 +110,7 @@ export async function getManagersByNameApi(name, navigate) {
       return response.data;
     }
   } catch (error) {
-    if (error.response?.status === 403) {
+    if (error.response?.status === 403 || error.response?.status === 401) {
       navigate("/login");
     }
     console.error("Xatolik yuz berdi:", error.message);
@@ -141,7 +143,7 @@ export async function getManagersWithPagination(page, limit, navigate) {
       return response.data;
     }
   } catch (error) {
-    if (error.response?.status === 403) {
+    if (error.response?.status === 403 || error.response?.status === 401) {
       navigate("/login");
     }
     console.error("Xatolik yuz berdi:", error.message);

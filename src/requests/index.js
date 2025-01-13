@@ -164,7 +164,7 @@ export async function updateEmployeeData(employeeId, updates, navigate) {
 
   try {
     const response = await axios.get(
-      `http://localhost:3000/employees/${employeeId}`,
+      `http://localhost:3000/employees/${employeeId.trim() ? "" : employeeId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -193,7 +193,10 @@ export async function updateEmployeeData(employeeId, updates, navigate) {
       );
 
       if (patchResponse.status === 200) {
-        console.log("Ma'lumot muvaffaqiyatli yangilandi:", patchResponse.data);
+        toast.success(
+          "Ma'lumot muvaffaqiyatli yangilandi:",
+          patchResponse.data
+        );
         return patchResponse.data;
       }
     }

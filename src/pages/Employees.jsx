@@ -9,29 +9,29 @@ import {
   getManagersApi,
   getManagersByNameApi,
   getManagersWithPagination,
+  updateEmployeeData,
 } from "../requests";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEditStore, useObjectStore } from "../zustend/store";
+import { useEditStore, useModalStore, useObjectStore } from "../zustend/store";
 import EditForm from "../components/EditForm";
 
 function Employees() {
-  const { object, add, update, remove, clear } = useObjectStore();
-  const [isModalOpen, setModalOpen] = useState(false);
+  const { object, add } = useObjectStore();
+  const { isModalOpen, openModal } = useModalStore();
   const [isTaskModalOpen, setTaskModalOpen] = useState(false);
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const setEditData = useEditStore((state) => state.setEditData);
-
-  const navigate = useNavigate();
+  const [modalEmploy, setModalEmploy] = useState(false);
   const [serachValue, setSearchValue] = useState("");
   const [isEmpty, setIsEmpty] = useState(true);
   const [tableData, setTableData] = useState("");
 
   const params = useParams();
+  const navigate = useNavigate();
 
   const handleSubmit = (formData) => {
     console.log("Form ma'lumotlari:", formData);
-    setModalOpen(false);
+    updateEmployeeData("", formData, navigate);
+    setModalEmploy(false);
   };
 
   const handlePagination = async (page) => {
@@ -94,38 +94,41 @@ function Employees() {
   }, [tableData]);
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white relative min-h-screen">
       <div className="flex flex-col items-start  p-6">
-        {params != "tasks" ? (
-          <button
-            onClick={() => setModalOpen(true)}
-            className="px-4 py-2 bg-lightGreen flex items-center gap-2 text-white rounded hover:opacity-60"
-          >
-            <span className="text-2xl">+</span> Hodim Qo'shish
-          </button>
-        ) : (
-          <button
-            onClick={() => setTaskModalOpen(true)}
-            className="px-4 my-5 py-2 bg-lightGreen flex items-center gap-2 text-white rounded hover:opacity-60"
-          >
-            <span className="text-2xl">+</span> Vazifa Qo'shish
-          </button>
-        )}
-        <div className="border mt-5 px-3 py-2 w-full max-w-[348px] rounded-lg flex items-center  gap-4">
-          <MagnifyingGlassIcon className="opacity-50" />
-          <form onSubmit={searchSubmit}>
-            <input
-              type="search"
-              name="search"
-              value={serachValue}
-              onChange={(event) => {
-                setSearchValue(event.target.value);
-              }}
-              className="outline-none w-11/12"
-              placeholder="search"
-              id=""
-            />
-          </form>
+        <button
+          onClick={() => setModalEmploy(true)}
+          className={`px-4 py-2 bg-lightGreen my-6 items-center gap-2 text-white rounded hover:opacity-60 ${
+            params.id == "tasks" ? "hidden" : "flex"
+          }`}
+        >
+          <span className="text-2xl">+</span> Hodim Qo'shish
+        </button>
+        <div className="flex items-center gap-4">
+          {params.id == "tasks" && (
+            <button
+              onClick={() => setTaskModalOpen(true)}
+              className={`px-4  py-2 bg-lightGreen whitespace-nowrap items-center gap-2 text-white rounded hover:opacity-60 `}
+            >
+              <span className="text-2xl">+</span> Vazifa Qo'shish
+            </button>
+          )}
+          <div className="border  px-3 py-2 w-full max-w-[348px] rounded-lg flex items-center  gap-4">
+            <MagnifyingGlassIcon className="opacity-50" />
+            <form onSubmit={searchSubmit}>
+              <input
+                type="search"
+                name="search"
+                value={serachValue}
+                onChange={(event) => {
+                  setSearchValue(event.target.value);
+                }}
+                className="outline-none w-11/12"
+                placeholder="search"
+                id=""
+              />
+            </form>
+          </div>
         </div>
       </div>
       {isEmpty ? (
@@ -141,12 +144,13 @@ function Employees() {
           />
 
           <Drawer
-            isOpen={isModalOpen}
-            onClose={() => setModalOpen(false)}
+            isOpen={modalEmploy}
+            onClose={() => setModalEmploy(false)}
             title="Hodim qo'shish"
             inputs={addEmploy}
             onSubmit={handleSubmit}
           />
+          <EditForm onSubmit={handleSubmit} isOpen={false} />
           <table className="w-full bg-white shadow-lg rounded-lg my-10">
             {params.id != "tasks" && (
               <thead className="bg-[#f5f5f5] py-7">
@@ -176,9 +180,11 @@ function Employees() {
                       <td
                         className="p-4 "
                         onClick={() => {
-                          console.log(employee, "employee details");
-                          add("key1", employee);
-                          navigate("/details");
+                          if (!params.id == "tasks") {
+                            console.log(employee, "employee details");
+                            add("key1", employee);
+                            navigate("/details");
+                          }
                         }}
                       >
                         {employee.name}
@@ -205,7 +211,10 @@ function Employees() {
 
                       <td className="p-4  flex space-x-2 justify-center">
                         <button
-                          onClick={() => setEditData(employee)}
+                          onClick={() => {
+                            add("key2", employee);
+                            openModal();
+                          }}
                           className="px-4 py-2 bg-lightGreen text-white rounded-lg hover:bg-green-600"
                         >
                           O'zgartirish
@@ -246,6 +255,7 @@ function Employees() {
                 })}
             </tbody>
           </table>
+
           <div className="flex space-x-4 mt-4">
             <button
               onClick={() => handlePagination(currentPage - 1)}

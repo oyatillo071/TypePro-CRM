@@ -5,6 +5,7 @@ import Drawer from "../components/unversalDrawer";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import {
   addEmployeeApi,
+  addTaskApi,
   deleteManagerApi,
   fullGetApi,
   getManagersApi,
@@ -75,8 +76,6 @@ function Employees() {
           data = [...employees, ...managers];
         }
 
-        // console.log("Fetched Data:", data);
-
         if (data) {
           setIsEmpty(false);
           setTableData(data);
@@ -89,17 +88,19 @@ function Employees() {
     fetchData();
   }, [navigate, params]);
 
-  // useEffect(() => {
-  //   console.log(tableData, "data 62 qator");
-  // }, [tableData]);
+  const handleSubmitAddTask = (formData) => {
+    setTaskModalOpen(false);
+    addTaskApi(navigate, formData);
+
+    setTaskModalOpen(false);
+  };
 
   const handleSubmit = async (formData) => {
-    console.log("Form ma'lumotlari:", formData);
+    // console.log("Form ma'lumotlari:", formData);
     const employeesData = await fullGetApi(navigate, "employees");
     formData.id = employeesData.length + 1;
-    // updateEmployeeData("", formData, navigate);
     addEmployeeApi(navigate, formData);
-    console.log(formData, "formData response");
+    // console.log(formData, "formData response");
 
     setModalEmploy(false);
   };
@@ -151,7 +152,7 @@ function Employees() {
             onClose={() => setTaskModalOpen(false)}
             title="Vazifa qo'shish"
             inputs={addTasks}
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmitAddTask}
           />
 
           <Drawer

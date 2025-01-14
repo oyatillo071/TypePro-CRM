@@ -50,6 +50,7 @@ function Employees() {
       console.error("Qidiruvda xatolik:", error.message);
     }
   }
+
   useEffect(() => {
     console.log(params);
 
@@ -66,11 +67,15 @@ function Employees() {
           } else {
             data = await fullGetApi(navigate, params.id);
           }
-        } else {
+        } else if (params.id == "managers") {
           data = await getManagersApi(navigate);
+        } else {
+          const employees = await fullGetApi(navigate, "employees");
+          const managers = await fullGetApi(navigate, "managers");
+          data = [...employees, ...managers];
         }
 
-        console.log("Fetched Data:", data);
+        // console.log("Fetched Data:", data);
 
         if (data) {
           setIsEmpty(false);
@@ -84,9 +89,9 @@ function Employees() {
     fetchData();
   }, [navigate, params]);
 
-  useEffect(() => {
-    console.log(tableData, "data 62 qator");
-  }, [tableData]);
+  // useEffect(() => {
+  //   console.log(tableData, "data 62 qator");
+  // }, [tableData]);
 
   const handleSubmit = async (formData) => {
     console.log("Form ma'lumotlari:", formData);
@@ -173,6 +178,8 @@ function Employees() {
             <tbody>
               {tableData &&
                 tableData?.map((employee, index) => {
+                  console.log(employee, "177 qator employee");
+
                   if (employee.isActive && params.id == "users") {
                     return;
                   }

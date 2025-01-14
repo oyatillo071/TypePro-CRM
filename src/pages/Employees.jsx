@@ -4,6 +4,7 @@ import { addEmploy, addTasks } from "../constants";
 import Drawer from "../components/unversalDrawer";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import {
+  addEmployeeApi,
   deleteManagerApi,
   fullGetApi,
   getManagersApi,
@@ -27,12 +28,6 @@ function Employees() {
 
   const params = useParams();
   const navigate = useNavigate();
-
-  const handleSubmit = (formData) => {
-    console.log("Form ma'lumotlari:", formData);
-    updateEmployeeData("", formData, navigate);
-    setModalEmploy(false);
-  };
 
   const handlePagination = async (page) => {
     try {
@@ -92,6 +87,17 @@ function Employees() {
   useEffect(() => {
     console.log(tableData, "data 62 qator");
   }, [tableData]);
+
+  const handleSubmit = async (formData) => {
+    console.log("Form ma'lumotlari:", formData);
+    const employeesData = await fullGetApi(navigate, "employees");
+    formData.id = employeesData.length + 1;
+    // updateEmployeeData("", formData, navigate);
+    addEmployeeApi(navigate, formData);
+    console.log(formData, "formData response");
+
+    setModalEmploy(false);
+  };
 
   return (
     <div className="bg-white relative min-h-screen">
@@ -167,8 +173,6 @@ function Employees() {
             <tbody>
               {tableData &&
                 tableData?.map((employee, index) => {
-                  // console.log(tableData.data, "88qator");
-                  // console.log(employee, "87qator");
                   if (employee.isActive && params.id == "users") {
                     return;
                   }
@@ -180,7 +184,7 @@ function Employees() {
                       <td
                         className="p-4 "
                         onClick={() => {
-                          if (!params.id == "tasks") {
+                          if (params.id != "tasks") {
                             console.log(employee, "employee details");
                             add("key1", employee);
                             navigate("/details");

@@ -3,11 +3,13 @@ import { useObjectStore } from "../zustend/store";
 import Button from "../components/Button";
 import { addTasks } from "../constants";
 import Drawer from "../components/unversalDrawer";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { addTaskApi, updateEmployeeData } from "../requests";
 
 function Details() {
   const [isTaskModalOpen, setTaskModalOpen] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate("");
   const params = useParams();
   useEffect(() => {
     console.log(params, "parametr");
@@ -15,7 +17,10 @@ function Details() {
   const { object, add, update, remove, clear } = useObjectStore();
   const handleSubmit = (formData) => {
     setTaskModalOpen(false);
-    console.log("Form ma'lumotlari:", formData);
+    const dataForsend = { ...object, tasks: [formData] };
+    console.log("Form ma'lumotlari:", dataForsend);
+    // addTaskApi(navigate, formData);
+    updateEmployeeData(dataForsend.id, dataForsend, navigate);
     setModalOpen(false);
   };
 
@@ -29,7 +34,7 @@ function Details() {
           {object?.value?.last_name}
         </h4>
         <h4 className="text-base text-[#9A9C9C] font-medium">Tasklar</h4>
-        {object?.value?.tasks.length < 1 && <h4>Task lar mavjud emas</h4>}
+        {object?.value?.tasks?.length < 1 && <h4>Task lar mavjud emas</h4>}
         <ol type="1" className="flex flex-col gap-4 pl-4 list-decimal">
           {object?.value?.tasks?.map((task, index) => (
             <li className="text-base text-[#4E4E4E]" key={index}>

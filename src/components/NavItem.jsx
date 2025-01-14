@@ -11,7 +11,7 @@ function NavItem(props) {
         to={link}
         className="flex items-center gap-3 p-3 mt-2  cursor-pointer  font-medium   text-[#2C3030] "
       >
-        {parse(img.src)}
+        <img src={img.src} alt={img.alt} className="filter grayscale" />
         {title}
       </NavLink>
     </div>

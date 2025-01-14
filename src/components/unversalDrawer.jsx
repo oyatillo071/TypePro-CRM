@@ -48,8 +48,8 @@ function Drawer({ isOpen, onClose, title, inputs, onSubmit }) {
         .map((el) => [el.id, el.value.trim()])
     );
     console.log(formDataObject, "To'liq ma'lumot");
-
-    onSubmit(formDataObject);
+    const formSubmitData = { ...formDataObject };
+    onSubmit(formSubmitData);
   };
 
   if (!isOpen) return null;

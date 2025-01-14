@@ -164,7 +164,7 @@ export async function updateEmployeeData(employeeId, updates, navigate) {
 
   try {
     const response = await axios.get(
-      `http://localhost:3000/employees/${employeeId.trim() ? "" : employeeId}`,
+      `http://localhost:3000/employees/${employeeId ? "" : employeeId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -210,8 +210,15 @@ export async function updateEmployeeData(employeeId, updates, navigate) {
 
 // add tasks
 export async function addTaskApi(navigate, newTask) {
+  const user = JSON.parse(localStorage.getItem("userData"));
+  const token = user.accessToken;
   try {
-    const userData = await axios.get(`http://localhost:3000/tasks`);
+    const userData = await axios.get(`http://localhost:3000/tasks`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (userData.status === 200) {
       const tasksData = userData.data;
@@ -233,17 +240,18 @@ export async function addTaskApi(navigate, newTask) {
         {
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      if (response.status === 200) {
+      if (response.status == 200 || response.status == 201) {
         console.log("Vazifa muvaffaqiyatli qo'shildi:", response.data);
         return response.data;
       }
     }
   } catch (error) {
-    if (error.response?.status === 403) {
+    if (error.response?.status === 403 || error.response?.status == 401) {
       navigate("/login");
     }
     console.error("Xatolik yuz berdi:", error.message);
@@ -336,5 +344,37 @@ export async function deleteManagerApi(navigate, id) {
       localStorage.removeItem(userData);
     }
     toast.error("Xatolik yuz berdi:", error.message);
+  }
+}
+
+// add employee
+export async function addEmployeeApi(navigate, newEmployee) {
+  const user = JSON.parse(localStorage.getItem("userData"));
+  const token = user.accessToken;
+  try {
+    const config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://localhost:3000/employees",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(newEmployee),
+    };
+
+    const response = await axios.request(config);
+
+    if (response.status === 201 || response.status === 200) {
+      console.log("Employee added successfully:", response.data);
+      return response.data;
+    }
+  } catch (error) {
+    if (error.response?.status === 403) {
+      console.error("Unauthorized access, redirecting to login.");
+      navigate("/login");
+    } else {
+      console.error("Error adding employee:", error.message);
+    }
   }
 }
